@@ -1,0 +1,21 @@
+{
+    "name": "Debian 12 Slim with Helm 3",
+    "image": "debian:12-slim",
+    "features": {
+      "ghcr.io/devcontainers/features/common-utils:1": {
+        "installZsh": false,
+        "installOhMyZsh": false,
+        "username": "root"
+      }
+    },
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "redhat.vscode-yaml"
+        ]
+      }
+    },
+    "postCreateCommand": "curl -sfL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash",
+    "remoteUser": "root"
+  }
+  

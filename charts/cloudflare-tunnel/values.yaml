@@ -1,0 +1,49 @@
+## Default values for Cloudflared
+
+## @section Image parameters
+## @param image.repository The Docker repository to pull the image from.
+## @param image.tag The image tag to use.
+## @param image.imagePullPolicy The logic of image pulling.
+##
+image:
+  repository: cloudflare/cloudflared
+  tag: "2025.2.1"
+  imagePullPolicy: IfNotPresent
+
+## @section Deployment parameters
+## @param replicaCount The number of replicas to deploy.
+## @param affinity If specified, the pod's scheduling constraints. Affinity is a group of affinity scheduling rules.
+## @param tolerations Tolerates any taint that matches the triple `<key,value,effect>` using the matching operator `<operator>`.
+## @param topologySpreadConstraints Control how pods are spread across your cluster among failure-domains such as regions, zones, nodes, and other user-defined topology domains.
+## @param resources If specified, it sets the resource requests and limits for the pod.
+##
+replicaCount: 1
+affinity: {}
+tolerations: []
+topologySpreadConstraints: []
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+
+
+## @param priorityClassName The priority class name to use for the tunnel.
+priorityClassName: ""
+
+## @param tunnel.token The connector token provided at the end of the CF Zero Trust tunnel creation.
+## @param tunnel.existingSecret The name of the existing secret containing the token. The secret key must be set to 'cf-tunnel-token'.
+## @param tunnel.logLevel The log level to use for the tunnel (Accept: debug, info, warn, error )
+tunnel:
+  token: ""
+  existingSecret: ""
+  logLevel: info
+
+## @param metrics.enabled Enable metrics for prometheus monitoring. The crd monitoring.coreos.com/v1 must be already installed on the target.
+## @param metrics.port The port to use for metrics.
+metrics:
+  enabled: false
+  port: ""

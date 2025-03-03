@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  replicas: {{ .Values.replicaCount | int }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Release.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+        args:
+        - tunnel
+        - --no-autoupdate     
+        {{- if .Values.logLevel }}
+        - --loglevel
+        - {{ .Values.logLevel }}
+        {{- end }}
+        {{- if .Values.metrics.enabled }}
+        - --metrics
+        - "0.0.0.0:{{ .Values.metrics.port }}"
+        {{ end }}
+        - run
+        - --token
+        - $(CF_MANAGED_TUNNEL_TOKEN)
+        env:
+        - name: CF_MANAGED_TUNNEL_TOKEN
+          {{- if .Values.tunnel.existingSecret }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.tunnel.existingSecret }}
+              key: cf-tunnel-token
+          {{- else }}
+          value: {{ .Values.tunnel.token }}
+          {{- end }}
+        {{- if .Values.metrics.enabled }}
+        ports:
+         - name: metrics
+           containerPort: {{ .Values.metrics.port }}
+        {{ end }}       
+        {{- with .Values.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}      
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
