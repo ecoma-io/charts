@@ -58,19 +58,8 @@ spec:
         resources:
           {{- toYaml . | nindent 10 }}
         {{- end }}
-        startupProbe:
-          httpGet:
-            path: /ready
-            port: 2000
-          failureThreshold: 8
-          initialDelaySeconds: 120
-          periodSeconds: 30      
         livenessProbe:
-          httpGet:
-            path: /ready
-            port: 2000
-          failureThreshold: 1
-          periodSeconds: 10      
+          {{- toYaml .Values.livenessProbe | nindent 10 }}
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       {{- if .Values.priorityClassName }}

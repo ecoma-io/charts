@@ -16,20 +16,26 @@ image:
 ## @param tolerations Tolerates any taint that matches the triple `<key,value,effect>` using the matching operator `<operator>`.
 ## @param topologySpreadConstraints Control how pods are spread across your cluster among failure-domains such as regions, zones, nodes, and other user-defined topology domains.
 ## @param resources If specified, it sets the resource requests and limits for the pod.
+## @param livenessProbe config the liveness probe for pod
 ##
 replicaCount: 1
 affinity: {}
 tolerations: []
 topologySpreadConstraints: []
 resources:
-  limits:
-    cpu: 100m
-    memory: 128Mi
   requests:
     cpu: 100m
+    memory: 64Mi
+  limits:    
+    cpu: 200m
     memory: 128Mi
-
-
+livenessProbe:
+  httpGet:
+    path: /ready
+    port: 2000
+  failureThreshold: 5
+  initialDelaySeconds: 10
+  periodSeconds: 10  
 
 ## @param priorityClassName The priority class name to use for the tunnel.
 priorityClassName: ""
