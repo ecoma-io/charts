@@ -12,6 +12,7 @@ image:
 
 ## @section Deployment parameters
 ## @param replicaCount The number of replicas to deploy.
+## @param priorityClassName The priority class name to use for the tunnel.
 ## @param affinity If specified, the pod's scheduling constraints. Affinity is a group of affinity scheduling rules.
 ## @param tolerations Tolerates any taint that matches the triple `<key,value,effect>` using the matching operator `<operator>`.
 ## @param topologySpreadConstraints Control how pods are spread across your cluster among failure-domains such as regions, zones, nodes, and other user-defined topology domains.
@@ -19,9 +20,16 @@ image:
 ## @param livenessProbe config the liveness probe for pod
 ##
 replicaCount: 1
+priorityClassName: system-cluster-critical
 affinity: {}
 tolerations: []
-topologySpreadConstraints: []
+topologySpreadConstraints:
+  - labelSelector:
+      matchLabels:
+        app: cloudflare-tunnel
+    maxSkew: 1
+    topologyKey: kubernetes.io/hostname
+    whenUnsatisfiable: ScheduleAnyway 
 resources:
   requests:
     cpu: 100m
@@ -37,18 +45,25 @@ livenessProbe:
   initialDelaySeconds: 10
   periodSeconds: 10  
 
-## @param priorityClassName The priority class name to use for the tunnel.
-priorityClassName: system-cluster-critical
 
 ## @param tunnel.token The connector token provided at the end of the CF Zero Trust tunnel creation.
 ## @param tunnel.existingSecret The name of the existing secret containing the token. The secret key must be set to 'cf-tunnel-token'.
 ## @param tunnel.logLevel The log level to use for the tunnel (Accept: debug, info, warn, error )
+## @param tunnel.protocol Specifies the protocol used to establish a connection between cloudflared and the Cloudflare global network. Available values are auto, http2, and quic.
+## @param tunnel.retries Specifies the maximum number of retries for connection/protocol errors. 
 tunnel:
   token: ""
   existingSecret: ""
   logLevel: info
   protocol: auto
   retries: 2
+
+hpa:
+  enabled: false  
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPU: 80
+  targetMemory: 80
 
 ## @param metrics.enabled Enable metrics for prometheus monitoring. The crd monitoring.coreos.com/v1 must be already installed on the target.
 ## @param metrics.port The port to use for metrics.

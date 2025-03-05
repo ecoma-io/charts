@@ -6,12 +6,14 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app: cloudflare-tunnel
+  {{- if not .Values.hpa.enabled }}
   replicas: {{ .Values.replicaCount | int }}
+  {{- end }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}
+        app: cloudflare-tunnel
     spec:
       securityContext:
         sysctls:

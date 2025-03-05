@@ -8,7 +8,7 @@ Cloudflare Tunnel provides you with a secure way to connect your resources to Cl
 
 ## Prerequisites
 
-- Kubernetes 1.12+
+- Kubernetes 1.23+
 - Helm 3.2.0+
 - Argo Tunnel ID generated
 
@@ -62,6 +62,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tunnel.enabled`           | Whether to enable Managed (CF Zero Trust Dashboard) tunnel configuration. Cannot coexist with the local one.                                  | `true`  |
 | `tunnel.token`             | The connector token provided at the end of the CF Zero Trust tunnel creation.                                                                 | `""`    |
 | `tunnel.existingSecret`    | The name of the existing secret containing the token. The secret key must be set to 'cf-tunnel-token'.                                        | `""`    |
+| `tunnel.protocol`          | Specifies the protocol used to establish a connection between cloudflared and the Cloudflare global network. (auto, http2, quic)              | `""`    |
+| `tunnel.retries`           | Specifies the maximum number of retries for connection/protocol errors.                                                                       | `""`    |
 
 
 ## Configuration and installation details
