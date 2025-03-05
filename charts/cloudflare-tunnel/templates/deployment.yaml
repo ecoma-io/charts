@@ -34,6 +34,8 @@ spec:
         {{ end }}        
         - --protocol
         - {{ .Values.tunnel.protocol }}
+        - --retries
+        - "{{ .Values.tunnel.retries }}"
         - run
         - --token
         - $(CF_MANAGED_TUNNEL_TOKEN)
