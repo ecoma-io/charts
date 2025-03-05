@@ -3,7 +3,7 @@ maintainers:
   - name: Ecoma
     url: https://ecoma.io
 apiVersion: v2
-version: 0.0.0
+version: 0.0.1
 description: Cloudflare tunnel helm chart
 home: https://github.com/ecoma-io/helm-charts/tree/main/charts/cloudflare-tunnel
 keywords:
