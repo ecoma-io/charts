@@ -31,7 +31,9 @@ spec:
         {{- if .Values.metrics.enabled }}
         - --metrics
         - "0.0.0.0:{{ .Values.metrics.port }}"
-        {{ end }}
+        {{ end }}        
+        - --protocol
+        - {{ .Values.tunnel.protocol }}
         - run
         - --token
         - $(CF_MANAGED_TUNNEL_TOKEN)
