@@ -58,6 +58,14 @@ tunnel:
   protocol: auto
   retries: 2
 
+
+## @param controller.updateStrategy.type Controller deployment update strategy
+## @param controller.updateStrategy.rollingUpdate Controller deployment rolling update configuration parameters
+##
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate: {}
+
 autoscaler:
   enabled: false  
   minReplicas: 2

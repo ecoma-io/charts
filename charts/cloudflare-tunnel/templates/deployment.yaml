@@ -7,10 +7,13 @@ spec:
   selector:
     matchLabels:
       app: cloudflare-tunnel
+  {{- if .Values.updateStrategy }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
   {{- if not .Values.hpa.enabled }}
   replicas: {{ .Values.replicaCount | int }}
   {{- end }}
-  template:
+  template:    
     metadata:
       labels:
         app: cloudflare-tunnel
