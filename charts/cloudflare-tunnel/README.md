@@ -1,4 +1,4 @@
-# Cloudflared
+# Cloudflare Tunnel
 
 A tunneling daemon that proxies traffic from the Cloudflare network to your origins. This daemon sits between Cloudflare network and your origin (e.g. a webserver). Cloudflare attracts client requests and sends them to you via this daemon, without requiring you to poke holes on your firewall --- your origin can remain as closed as possible. Extensive documentation can be found in the [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps) section of the Cloudflare Docs.
 
@@ -19,7 +19,7 @@ To install the chart with the release name `cloudflare-tunnel`:
 ```console
 helm repo add ecomma https://ecomma-io.github.io/helm-charts
 helm repo update
-helm install cloudflare-tunnel Ecomadev/cloudflared
+helm install cloudflare-tunnel ecoma/cloudflare-tunnel
 ```
 
 The command deploys cloudflared on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
