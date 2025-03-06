@@ -1,0 +1,96 @@
+{{- if .Values.controller.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: "{{ .Release.Name }}-controller-autoscaler"
+  namespace: {{ .Release.Namespace }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: "{{ .Release.Name }}-controller"
+  minReplicas: {{ .Values.controller.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.controller.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.controller.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.controller.autoscaling.targetMemory }}
+    {{- end }}
+    {{- if .Values.controller.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.controller.autoscaling.targetCPU }}
+    {{- end }}
+{{- end }}
+
+---
+{{- if .Values.webhook.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: "{{ .Release.Name }}-webhook-autoscaler"
+  namespace: {{ .Release.Namespace }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: "{{ .Release.Name }}-webhook"
+  minReplicas: {{ .Values.webhook.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.webhook.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.webhook.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.webhook.autoscaling.targetMemory }}
+    {{- end }}
+    {{- if .Values.webhook.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.webhook.autoscaling.targetCPU }}
+    {{- end }}
+{{- end }}
+---
+{{- if .Values.cainjector.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: "{{ .Release.Name }}-cainjector-autoscaler"
+  namespace: {{ .Release.Namespace }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: "{{ .Release.Name }}-cainjector"
+  minReplicas: {{ .Values.cainjector.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.cainjector.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.cainjector.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.cainjector.autoscaling.targetMemory }}
+    {{- end }}
+    {{- if .Values.cainjector.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.cainjector.autoscaling.targetCPU }}
+    {{- end }}
+{{- end }}
