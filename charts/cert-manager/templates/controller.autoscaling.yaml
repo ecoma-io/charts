@@ -1,0 +1,33 @@
+{{- if index .Values "cert-manager" "controller" "autoscaling" "enabled" }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: "{{ .Release.Name }}-controller"
+  namespace: {{ .Release.Namespace }}  
+  annotations:
+    "helm.sh/hook": post-install
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: "{{ .Release.Name }}-controller"
+  minReplicas: {{ index .Values "cert-manager" "controller" "autoscaling" "minReplicas" }}
+  maxReplicas: {{ index .Values "cert-manager" "controller" "autoscaling" "maxReplicas" }}
+  metrics:
+    {{- if index .Values "cert-manager" "controller" "autoscaling" "targetMemory" }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ index .Values "cert-manager" "controller" "autoscaling" "targetMemory" }}
+    {{- end }}
+    {{- if index .Values "cert-manager" "controller" "autoscaling" "targetCPU" }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ index .Values "cert-manager" "controller" "autoscaling" "targetCPU" }}
+    {{- end }}
+{{- end }}
