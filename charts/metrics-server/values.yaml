@@ -197,7 +197,9 @@ metrics-servers:
   ##   - --kubelet-insecure-tls=true
   ##   - --kubelet-preferred-address-types=InternalIP
   ##
-  extraArgs: []
+  extraArgs: 
+    - --kubelet-insecure-tls
+    - --kubelet-preferred-address-types=InternalIP
   ## @param sidecars Add additional sidecar containers to the metrics-server pod(s)
   ## e.g:
   ## sidecars:
