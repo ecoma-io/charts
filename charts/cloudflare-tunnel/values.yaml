@@ -21,8 +21,15 @@ image:
 ##
 replicaCount: 1
 priorityClassName: system-cluster-critical
-affinity: {}
-tolerations: []
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app: cloudflare-tunnel
+          topologyKey: "kubernetes.io/hostname"
 topologySpreadConstraints:
   - labelSelector:
       matchLabels:
@@ -30,17 +37,26 @@ topologySpreadConstraints:
     maxSkew: 1
     topologyKey: kubernetes.io/hostname
     whenUnsatisfiable: ScheduleAnyway 
+tolerations: []
 resources:
   requests:
-    cpu: 100m
-    memory: 64Mi
-  limits:    
     cpu: 200m
     memory: 128Mi
+  limits:    
+    cpu: 400m
+    memory: 256Mi
+
+
+## @param metrics.enabled Enable metrics for prometheus monitoring. The crd monitoring.coreos.com/v1 must be already installed on the target.
+## @param metrics.port The port to use for metrics.
+metrics:
+  enabled: true
+  port: 9327
+
 livenessProbe:
   httpGet:
     path: /ready
-    port: 2000
+    port: 9327
   failureThreshold: 5
   initialDelaySeconds: 10
   periodSeconds: 10  
@@ -64,7 +80,9 @@ tunnel:
 ##
 updateStrategy:
   type: RollingUpdate
-  rollingUpdate: {}
+  rollingUpdate:
+    maxUnavailable: 0  
+    maxSurge: 1       
 
 
 ## @param pdb.create Enable/disable a Pod Disruption Budget creation
@@ -73,18 +91,14 @@ updateStrategy:
 ##
 pdb:
   create: true
-  minAvailable: ""
-  maxUnavailable: ""
+  maxUnavailable: 1
+  minAvailable: 1
+
 
 autoscaler:
   enabled: false  
   minReplicas: 2
-  maxReplicas: 4
-  targetCPU: 80
-  targetMemory: 80
+  maxReplicas: 5
+  targetCPU: 70
+  targetMemory: 70
 
-## @param metrics.enabled Enable metrics for prometheus monitoring. The crd monitoring.coreos.com/v1 must be already installed on the target.
-## @param metrics.port The port to use for metrics.
-metrics:
-  enabled: false
-  port: ""

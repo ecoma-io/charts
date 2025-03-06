@@ -1,5 +1,5 @@
 apiVersion: v2
-version: 0.0.1
+version: 1.0.0
 name: metrics-server
 icon: https://raw.githubusercontent.com/ecoma-io/helm-charts/refs/heads/main/icons/metrics-server.png
 description: Metrics Server aggregates resource usage data, such as container CPU and memory usage, in a Kubernetes cluster and makes it available via the Metrics API.

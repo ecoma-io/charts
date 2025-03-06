@@ -104,9 +104,9 @@ traefik:
 
   # -- [Pod Disruption Budget](https://kubernetes.io/docs/reference/kubernetes-api/policy-resources/pod-disruption-budget-v1/)
   podDisruptionBudget:  # @schema additionalProperties: false
-    enabled: false
-    maxUnavailable:  # @schema type:[string, integer, null];minimum:0
-    minAvailable:    # @schema type:[string, integer, null];minimum:0
+    enabled: true
+    maxUnavailable:  1
+    minAvailable:    1
 
   # -- Create a default IngressClass for Traefik
   ingressClass:  # @schema additionalProperties: false
@@ -597,7 +597,7 @@ traefik:
   # -- Global command arguments to be passed to all traefik's pods
   globalArguments:
   - "--global.checknewversion"
-  - "--global.sendanonymoususage"
+  # - "--global.sendanonymoususage"
 
   # -- Additional arguments to be passed at Traefik's binary
   # See [CLI Reference](https://docs.traefik.io/reference/static-configuration/cli/)
@@ -765,7 +765,7 @@ traefik:
     ## -- Single service is using `MixedProtocolLBService` feature gate.
     ## -- When set to false, it will create two Service, one for TCP and one for UDP.
     single: true
-    type: LoadBalancer
+    type: ClusterIP
     # -- Additional annotations applied to both TCP and UDP services (e.g. for cloud provider specific config)
     annotations: {}
     # -- Additional annotations for TCP service only
@@ -810,7 +810,22 @@ traefik:
   autoscaling:
     # -- Create HorizontalPodAutoscaler object.
     # See EXAMPLES.md for more details.
-    enabled: false
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 70
 
   persistence:
     # -- Enable persistence using Persistent Volume Claims
@@ -869,12 +884,27 @@ traefik:
   serviceAccountAnnotations: {}
 
   # -- [Resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for `traefik` container.
-  resources: {}
+  resources:
+    requests:
+      cpu: 250m       
+      memory: 128Mi    
+    limits:
+      cpu: 500m       
+      memory: 256Mi
 
   # -- This example pod anti-affinity forces the scheduler to put traefik pods
   # -- on nodes where no other traefik pods are scheduled.
   # It should be used when hostNetwork: true to prevent port conflicts
-  affinity: {}
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: '{{ template "traefik.name" . }}'
+                app.kubernetes.io/instance: '{{ .Release.Name }}-{{ include "traefik.namespace" . }}'
+            topologyKey: "kubernetes.io/hostname"
   #  podAntiAffinity:
   #    requiredDuringSchedulingIgnoredDuringExecution:
   #      - labelSelector:
@@ -889,7 +919,14 @@ traefik:
   tolerations: []
   # -- You can use topology spread constraints to control
   # how Pods are spread across your cluster among failure-domains.
-  topologySpreadConstraints: []
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: "kubernetes.io/hostname"
+      whenUnsatisfiable: ScheduleAnyway
+      labelSelector:
+        matchLabels:
+          app.kubernetes.io/name: '{{ template "traefik.name" . }}'
+          app.kubernetes.io/instance: '{{ .Release.Name }}-{{ include "traefik.namespace" . }}'
   # This example topologySpreadConstraints forces the scheduler to put traefik pods
   # on nodes where no other traefik pods are scheduled.
   #  - labelSelector:

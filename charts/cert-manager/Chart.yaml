@@ -1,5 +1,5 @@
 apiVersion: v2
-version: 0.0.1
+version: 1.0.0
 name: cert-manager
 icon: https://raw.githubusercontent.com/ecoma-io/helm-charts/refs/heads/main/icons/cert-manager.png
 description: Cert-manager is a Kubernetes add-on to automate the management and issuance of TLS certificates from various issuing sources.

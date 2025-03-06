@@ -70,21 +70,6 @@ cert-manager:
     ##
     replicaCount: 1
 
-    ## Autoscaling configuration
-    ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-    ## @param controller.autoscaling.enabled Enable autoscaling for master
-    ## @param controller.autoscaling.minReplicas Minimum number of master replicas
-    ## @param controller.autoscaling.maxReplicas Maximum number of master replicas
-    ## @param controller.autoscaling.targetCPU Target CPU utilization percentage
-    ## @param controller.autoscaling.targetMemory Target Memory utilization percentage
-    ##
-    autoscaling:
-      enabled: false
-      minReplicas: 2
-      maxReplicas: 3
-      targetCPU: 70
-      targetMemory: 70
-
     ## Bitnami cert-manager image
     ## ref: https://hub.docker.com/r/bitnami/cert-manager/tags/
     ## @param controller.image.registry [default: REGISTRY_NAME] Controller image registry
@@ -160,8 +145,14 @@ cert-manager:
     ##   limits:
     ##     cpu: 3
     ##     memory: 1024Mi
-    ##
-    resources: {}
+    ##    
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
     ## controller pods' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
     ## @param controller.podSecurityContext.enabled Enabled Controller pods' Security Context
@@ -497,20 +488,6 @@ cert-manager:
     ##
     replicaCount: 1
     
-    ## Autoscaling configuration
-    ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-    ## @param webhook.autoscaling.enabled Enable autoscaling for master
-    ## @param webhook.autoscaling.minReplicas Minimum number of master replicas
-    ## @param webhook.autoscaling.maxReplicas Maximum number of master replicas
-    ## @param webhook.autoscaling.targetCPU Target CPU utilization percentage
-    ## @param webhook.autoscaling.targetMemory Target Memory utilization percentage
-    ##
-    autoscaling:
-      enabled: false
-      minReplicas: 2
-      maxReplicas: 3
-      targetCPU: 70
-      targetMemory: 70
 
     ## Bitnami cert-manager Webhook image
     ## ref: https://hub.docker.com/r/bitnami/cert-manager-webhook/tags/
@@ -558,8 +535,14 @@ cert-manager:
     ##   limits:
     ##     cpu: 3
     ##     memory: 1024Mi
-    ##
-    resources: {}
+    ##    
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
     ## webhook pods' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
     ## @param webhook.podSecurityContext.enabled Enabled Webhook pods' Security Context
@@ -881,20 +864,6 @@ cert-manager:
     ##
     replicaCount: 1
 
-    ## Autoscaling configuration
-    ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-    ## @param webhook.autoscaling.enabled Enable autoscaling for master
-    ## @param webhook.autoscaling.minReplicas Minimum number of master replicas
-    ## @param webhook.autoscaling.maxReplicas Maximum number of master replicas
-    ## @param webhook.autoscaling.targetCPU Target CPU utilization percentage
-    ## @param webhook.autoscaling.targetMemory Target Memory utilization percentage
-    ##
-    autoscaling:
-      enabled: false
-      minReplicas: 2
-      maxReplicas: 3
-      targetCPU: 70
-      targetMemory: 70
       
     ## Bitnami CAInjector image
     ## ref: https://hub.docker.com/r/bitnami/cainjector/tags/
@@ -943,7 +912,13 @@ cert-manager:
     ##     cpu: 3
     ##     memory: 1024Mi
     ##
-    resources: {}
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
     ## cainjector pods' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
     ## @param cainjector.podSecurityContext.enabled Enabled CAInjector pods' Security Context
