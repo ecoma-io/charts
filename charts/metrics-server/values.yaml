@@ -172,9 +172,8 @@ metrics-servers:
   ##
   command: []
   ## @param args Override default container args (useful when using custom images)
-  args:      
-    - --kubelet-insecure-tls
-    - --kubelet-preferred-address-types=InternalIP
+  ##
+  args: []
   ## @param lifecycleHooks for the metrics-server container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -198,7 +197,10 @@ metrics-servers:
   ##   - --kubelet-insecure-tls=true
   ##   - --kubelet-preferred-address-types=InternalIP
   ##
-  extraArgs: []
+  extraArgs:
+    - --kubelet-insecure-tls=true
+    - --kubelet-preferred-address-types=InternalIP
+
   ## @param sidecars Add additional sidecar containers to the metrics-server pod(s)
   ## e.g:
   ## sidecars:
@@ -246,7 +248,7 @@ metrics-servers:
   ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
-  podAntiAffinityPreset: hard
+  podAntiAffinityPreset: soft
   ## Pod disruption budget
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets
   ## @param pdb.create Create a PodDisruptionBudget
@@ -254,9 +256,9 @@ metrics-servers:
   ## @param pdb.maxUnavailable Maximum unavailable instances
   ##
   pdb:
-    create: true
+    create: false
     minAvailable: ""
-    maxUnavailable: 0
+    maxUnavailable: ""
   ## Node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
