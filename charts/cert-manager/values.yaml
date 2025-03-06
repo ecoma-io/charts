@@ -478,7 +478,7 @@ cert-manager:
     pdb:
       create: true
       minAvailable: ""
-      maxUnavailable: ""
+      maxUnavailable: 1
   ## @section Webhook deployment parameters
 
   ## Webhook deployment parameters
@@ -590,7 +590,7 @@ cert-manager:
     ## @param webhook.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `webhook.affinity` is set. Allowed values: `soft` or `hard`
     ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
     ##
-    podAntiAffinityPreset: soft
+    podAntiAffinityPreset: hard
     ## Node affinity preset
     ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
     ## @param webhook.nodeAffinityPreset.type Node affinity preset type. Ignored if `webhook.affinity` is set. Allowed values: `soft` or `hard`
@@ -1233,7 +1233,7 @@ cert-manager:
       targetPort: 9402
       ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
       ##
-      enabled: false
+      enabled: true
       ## @param metrics.serviceMonitor.namespace Namespace which Prometheus is running in
       ## e.g:
       ## namespace: monitoring

@@ -245,7 +245,7 @@ metrics-servers:
   ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
-  podAntiAffinityPreset: soft
+  podAntiAffinityPreset: hard
   ## Pod disruption budget
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets
   ## @param pdb.create Create a PodDisruptionBudget
@@ -255,7 +255,7 @@ metrics-servers:
   pdb:
     create: true
     minAvailable: ""
-    maxUnavailable: ""
+    maxUnavailable: 0
   ## Node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
