@@ -1,4 +1,4 @@
-{{- if .Values.cert-manager.controller.autoscaling.enabled }}
+{{- if index .Values "cert-manager" "controller" "autoscaling" "enabled" }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -9,29 +9,28 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: "{{ .Release.Name }}-controller"
-  minReplicas: {{ .Values.cert-manager.controller.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.cert-manager.controller.autoscaling.maxReplicas }}
+  minReplicas: {{ index .Values "cert-manager" "controller" "autoscaling" "minReplicas" }}
+  maxReplicas: {{ index .Values "cert-manager" "controller" "autoscaling" "maxReplicas" }}
   metrics:
-    {{- if .Values.cert-manager.controller.autoscaling.targetMemory }}
+    {{- if index .Values "cert-manager" "controller" "autoscaling" "targetMemory" }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.cert-manager.controller.autoscaling.targetMemory }}
+          averageUtilization: {{ index .Values "cert-manager" "controller" "autoscaling" "targetMemory" }}
     {{- end }}
-    {{- if .Values.cert-manager.controller.autoscaling.targetCPU }}
+    {{- if index .Values "cert-manager" "controller" "autoscaling" "targetCPU" }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.cert-manager.controller.autoscaling.targetCPU }}
+          averageUtilization: {{ index .Values "cert-manager" "controller" "autoscaling" "targetCPU" }}
     {{- end }}
 {{- end }}
-
 ---
-{{- if .Values.cert-manager.webhook.autoscaling.enabled }}
+{{- if index .Values "cert-manager" "webhook" "autoscaling" "enabled" }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -42,28 +41,28 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: "{{ .Release.Name }}-webhook"
-  minReplicas: {{ .Values.cert-manager.webhook.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.cert-manager.webhook.autoscaling.maxReplicas }}
+  minReplicas: {{ index .Values "cert-manager" "webhook" "autoscaling" "minReplicas" }}
+  maxReplicas: {{ index .Values "cert-manager" "webhook" "autoscaling" "maxReplicas" }}
   metrics:
-    {{- if .Values.cert-manager.webhook.autoscaling.targetMemory }}
+    {{- if index .Values "cert-manager" "webhook" "autoscaling" "targetMemory" }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.cert-manager.webhook.autoscaling.targetMemory }}
+          averageUtilization: {{ index .Values "cert-manager" "webhook" "autoscaling" "targetMemory" }}
     {{- end }}
-    {{- if .Values.cert-manager.webhook.autoscaling.targetCPU }}
+    {{- if index .Values "cert-manager" "webhook" "autoscaling" "targetCPU" }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.cert-manager.webhook.autoscaling.targetCPU }}
+          averageUtilization: {{ index .Values "cert-manager" "webhook" "autoscaling" "targetCPU" }}
     {{- end }}
 {{- end }}
 ---
-{{- if .Values.cert-manager.cainjector.autoscaling.enabled }}
+{{- if index .Values "cert-manager" "cainjector" "autoscaling" "enabled" }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -74,23 +73,23 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: "{{ .Release.Name }}-cainjector"
-  minReplicas: {{ .Values.cert-manager.cainjector.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.cert-manager.cainjector.autoscaling.maxReplicas }}
+  minReplicas: {{ index .Values "cert-manager" "cainjector" "autoscaling" "minReplicas" }}
+  maxReplicas: {{ index .Values "cert-manager" "cainjector" "autoscaling" "maxReplicas" }}
   metrics:
-    {{- if .Values.cert-manager.cainjector.autoscaling.targetMemory }}
+    {{- if index .Values "cert-manager" "cainjector" "autoscaling" "targetMemory" }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.cert-manager.cainjector.autoscaling.targetMemory }}
+          averageUtilization: {{ index .Values "cert-manager" "cainjector" "autoscaling" "targetMemory" }}
     {{- end }}
-    {{- if .Values.cert-manager.cainjector.autoscaling.targetCPU }}
+    {{- if index .Values "cert-manager" "cainjector" "autoscaling" "targetCPU" }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.cert-manager.cainjector.autoscaling.targetCPU }}
+          averageUtilization: {{ index .Values "cert-manager" "cainjector" "autoscaling" "targetCPU" }}
     {{- end }}
 {{- end }}
