@@ -10,7 +10,7 @@ spec:
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- if not .Values.hpa.enabled }}
+  {{- if not .Values.autoscaler.enabled }}
   replicas: {{ .Values.replicaCount | int }}
   {{- end }}
   template:    
