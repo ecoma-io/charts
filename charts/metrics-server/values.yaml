@@ -172,8 +172,9 @@ metrics-servers:
   ##
   command: []
   ## @param args Override default container args (useful when using custom images)
-  ##
-  args: []
+  args:      
+    - --kubelet-insecure-tls
+    - --kubelet-preferred-address-types=InternalIP
   ## @param lifecycleHooks for the metrics-server container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -197,9 +198,7 @@ metrics-servers:
   ##   - --kubelet-insecure-tls=true
   ##   - --kubelet-preferred-address-types=InternalIP
   ##
-  extraArgs: 
-    - --kubelet-insecure-tls
-    - --kubelet-preferred-address-types=InternalIP
+  extraArgs: []
   ## @param sidecars Add additional sidecar containers to the metrics-server pod(s)
   ## e.g:
   ## sidecars:
