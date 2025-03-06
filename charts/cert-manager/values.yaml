@@ -1306,8 +1306,3 @@ cert-manager:
   ##
   rbac:
     create: true
-
-
-defaultClusterIssuer:
-  create: true
-  secretName: tls-cluster-cert
