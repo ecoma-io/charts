@@ -1,6 +1,6 @@
 apiVersion: v2
 version: 1.0.0
-name: cloudflared
+name: cloudflare-tunnel
 icon: https://raw.githubusercontent.com/ecoma-io/helm-charts/refs/heads/main/icons/cloudlflare-tunnel.png
 description: Cloudflare tunnel allows you to securely connect your applications to cloudflare without a publicly routable IP address. 
 home: https://github.com/ecoma-io/helm-charts

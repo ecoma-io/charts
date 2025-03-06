@@ -58,7 +58,7 @@ tunnel:
   protocol: auto
   retries: 2
 
-hpa:
+autoscaler:
   enabled: false  
   minReplicas: 2
   maxReplicas: 4
