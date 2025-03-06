@@ -71,7 +71,7 @@ tunnel:
   token: ""
   existingSecret: ""
   logLevel: info
-  protocol: auto
+  protocol: http2
   retries: 2
 
 
@@ -96,7 +96,7 @@ pdb:
 
 
 autoscaler:
-  enabled: false  
+  enabled: true  
   minReplicas: 2
   maxReplicas: 5
   targetCPU: 70
