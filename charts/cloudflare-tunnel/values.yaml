@@ -90,7 +90,6 @@ updateStrategy:
 ##
 pdb:
   create: true
-  maxUnavailable: 0
   minAvailable: 1
 
 
