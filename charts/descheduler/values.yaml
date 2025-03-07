@@ -1,7 +1,0 @@
-descheduler:
-  schedule: "*/5 * * * *"
-  nodeSelector: {}
-  tolerations: []
-  rbac:
-    create: true
-
