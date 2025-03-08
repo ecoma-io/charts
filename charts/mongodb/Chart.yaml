@@ -1,0 +1,25 @@
+apiVersion: v2
+version: 1.0.0
+appVersion: 4.4.15
+engine: gotpl
+name: mongodb
+icon: https://raw.githubusercontent.com/ecoma-io/helm-charts/refs/heads/main/icons/mongodb.png
+description: MongoDB 4 fork from bitnami mongodb helm chart
+home: https://github.com/ecoma-io/helm-charts
+keywords:
+  - kubernetes
+  - cloudflare
+  - cloudflared
+  - argo
+  - tunnel
+sources:
+  - https://github.com/ecoma-io/helm-charts/tree/main/charts/mongodb
+maintainers:
+  - name: Ecoma
+    url: https://ecoma.io
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
