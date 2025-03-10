@@ -1,0 +1,16 @@
+apiVersion: v2
+version: 1.0.0
+appVersion: 5.0.2
+name: adminer
+icon: https://raw.githubusercontent.com/ecoma-io/helm-charts/refs/heads/main/icons/adminer.png
+description: Database management in a single PHP file
+home: https://github.com/ecoma-io/helm-charts
+keywords:
+  - kubernetes
+  - database
+  - db admin
+sources:
+  - https://github.com/ecoma-io/helm-charts/tree/main/charts/adminer
+maintainers:
+  - name: Ecoma
+    url: https://ecoma.io
