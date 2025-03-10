@@ -4023,7 +4023,7 @@ externalDatabase:
   initDatabaseJob:
     ## @param externalDatabase.initDatabaseJob.enabled Enable the init external database job
     ##
-    enabled: true
+    enabled: false
     ## @param externalDatabase.initDatabaseJob.labels Extra labels for the init external database job
     ##
     labels: {}
