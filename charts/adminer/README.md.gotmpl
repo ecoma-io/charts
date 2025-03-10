@@ -1,0 +1,51 @@
+{{ template "chart.header" . }}
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.badgesSection" . }}
+[![adminer](https://github.com/ectobit/charts/actions/workflows/adminer.yml/badge.svg)](https://github.com/ectobit/charts/actions/workflows/adminer.yml)
+[![License](https://img.shields.io/badge/license-BSD--2--Clause--Patent-orange.svg)](https://github.com/ectobit/charts/blob/main/adminer/LICENSE)
+
+## Add repository
+
+`helm repo add ectobit https://charts.ectobit.com`
+
+## Install
+
+```sh
+helm install adminer ectobit/adminer
+```
+
+## Helmfile
+
+```yaml
+releases:
+- name: adminer
+  chart: ectobit/adminer
+  namespace: default
+  values:
+  - ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      hosts:
+      - host: adminer.your-domain.com
+        paths:
+        - path: /
+          pathType: Prefix
+      tls:
+      - secretName: your-domain-com-tls
+        hosts:
+        - adminer.your-domain.com
+```
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
