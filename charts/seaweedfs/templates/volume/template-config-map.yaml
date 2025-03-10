@@ -1,4 +1,4 @@
-apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.configMap.apiVersion" . }}
 kind: ConfigMap
 metadata:
   name: '{{ template "seaweedfs.volume.fullname" . }}-template'
