@@ -2247,7 +2247,7 @@ filer:
 s3:
   ## @param s3.enabled Enable Amazon S3 API deployment
   ##
-  enabled: false
+  enabled: true
   ## @param s3.replicaCount Number of Amazon S3 API replicas to deploy
   ##
   replicaCount: 1
@@ -3794,7 +3794,7 @@ mariadb:
   ## @param mariadb.enabled Deploy a MariaDB server to satisfy the Filer server database requirements
   ## To use an external database set this to false and configure the `externalDatabase.*` parameters
   ##
-  enabled: true
+  enabled: false
   ## Bitnami MariaDB image
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb
   ## @param mariadb.image.registry [default: REGISTRY_NAME] MariaDB image registry
@@ -3990,25 +3990,25 @@ postgresql:
 externalDatabase:
   ## @param externalDatabase.enabled Enable external database support
   ##
-  enabled: false
+  enabled: true
   ## @param externalDatabase.store Database store (mariadb, postgresql)
   ##
   store: mariadb
   ## @param externalDatabase.host External Database server host
   ##
-  host: localhost
+  host: seaweedfs-mariadb
   ## @param externalDatabase.port External Database server port
   ##
   port: 3306
   ## @param externalDatabase.user External Database username
   ##
-  user: bn_seaweedfs
+  user: seaweedfs
   ## @param externalDatabase.password External Database user password
   ##
-  password: ""
+  password: seaweedfs
   ## @param externalDatabase.database External Database database name
   ##
-  database: bitnami_seaweedfs
+  database: seaweedfs
   ## @param externalDatabase.existingSecret The name of an existing secret with database credentials. Evaluated as a template
   ## NOTE: Must contain key `mariadb-password` for mariadb or 'postgres-password' for postgres
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
@@ -4023,7 +4023,7 @@ externalDatabase:
   initDatabaseJob:
     ## @param externalDatabase.initDatabaseJob.enabled Enable the init external database job
     ##
-    enabled: false
+    enabled: true
     ## @param externalDatabase.initDatabaseJob.labels Extra labels for the init external database job
     ##
     labels: {}
