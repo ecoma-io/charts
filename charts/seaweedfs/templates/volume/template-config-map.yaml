@@ -17,9 +17,7 @@ data:
       annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
       {{- end }}
     spec:
-      {{- if not .Values.volume.autoscaling.enabled }}
-      replicas: {{ .Values.volume.replicaCount }}
-      {{- end }}
+      replicas: 1
       podManagementPolicy: {{ .Values.volume.podManagementPolicy | quote }}
       {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.volume.podLabels .Values.commonLabels) "context" .) }}
       selector:
@@ -48,23 +46,6 @@ data:
           {{- if .Values.volume.hostAliases }}
           hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.volume.hostAliases "context" $) | nindent 8 }}
           {{- end }}
-          {{- if .Values.volume.affinity }}
-          affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.volume.affinity "context" $) | nindent 8 }}
-          {{- else }}
-          affinity:
-            {{- if not (empty .Values.volume.podAffinityPreset) }}
-            podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.volume.podAffinityPreset "component" "volume" "customLabels" $podLabels "context" $) | nindent 10 }}
-            {{- end }}
-            {{- if not (empty .Values.volume.podAntiAffinityPreset) }}
-            podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.volume.podAntiAffinityPreset "component" "volume" "customLabels" $podLabels "context" $) | nindent 10 }}
-            {{- end }}
-            {{- if not (empty .Values.volume.nodeAffinityPreset.type) }}
-            nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.volume.nodeAffinityPreset.type "key" .Values.volume.nodeAffinityPreset.key "values" .Values.volume.nodeAffinityPreset.values) | nindent 10 }}
-            {{- end }}
-          {{- end }}
-          {{- if .Values.volume.nodeSelector }}
-          nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.volume.nodeSelector "context" $) | nindent 8 }}
-          {{- end }}
           {{- if .Values.volume.tolerations }}
           tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.volume.tolerations "context" .) | nindent 8 }}
           {{- end }}
@@ -73,9 +54,6 @@ data:
           {{- end }}
           {{- if .Values.volume.schedulerName }}
           schedulerName: {{ .Values.volume.schedulerName | quote }}
-          {{- end }}
-          {{- if .Values.volume.topologySpreadConstraints }}
-          topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.volume.topologySpreadConstraints "context" .) | nindent 8 }}
           {{- end }}
           {{- if .Values.volume.podSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volume.podSecurityContext "context" $) | nindent 8 }}
@@ -144,19 +122,9 @@ data:
                 {{- end }}
                 - -v={{ .Values.volume.logLevel }}
                 - -config_dir=/etc/seaweedfs
-                - volume
-                {{- $dataDirs := list }}
-                {{- $maxVolumes := list }}
-                {{- range .Values.volume.dataVolumes }}
-                {{- $dataDirs = append $dataDirs .mountPath }}
-                {{- if eq (.maxVolumes | toString) "0" }}
-                {{- $maxVolumes = append $maxVolumes 0 }}
-                {{- else }}
-                {{- $maxVolumes = append $maxVolumes (default 8 .maxVolumes) }}
-                {{- end }}
-                {{- end }}
-                - -dir={{ join "," $dataDirs }}
-                - -max={{ join "," $maxVolumes }}
+                - volume           
+                - -dir=[DATA_DIR]
+                - -max=[MAX_VOLUMES]
                 - -ip.bind={{ .Values.volume.bindAddress }}
                 - -ip=$(POD_NAME).{{ printf "%s-headless" (include "seaweedfs.volume.fullname" .) }}.$(NAMESPACE).svc.{{ .Values.clusterDomain }}
                 - -port={{ .Values.volume.containerPorts.http }}

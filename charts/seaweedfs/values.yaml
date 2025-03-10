@@ -1049,44 +1049,7 @@ volume:
   ## @param volume.podAnnotations Annotations for Volume Server pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  podAnnotations: {}
-  ## @param volume.podAffinityPreset Pod affinity preset. Ignored if `volume.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param volume.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `volume.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: soft
-  ## Node volume.affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param volume.nodeAffinityPreset.type Node affinity preset type. Ignored if `volume.affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param volume.nodeAffinityPreset.key Node label key to match. Ignored if `volume.affinity` is set
-    ##
-    key: ""
-    ## @param volume.nodeAffinityPreset.values Node label values to match. Ignored if `volume.affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param volume.affinity Affinity for Volume Server pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `volume.podAffinityPreset`, `volume.podAntiAffinityPreset`, and `volume.nodeAffinityPreset` will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param volume.nodeSelector Node labels for Volume Server pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
-  ##
-  nodeSelector: {}
-  ## @param volume.tolerations Tolerations for Volume Server pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
+  podAnnotations: {}  
   tolerations: []
   ## @param volume.updateStrategy.type Volume Server StatefulSet strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
@@ -1411,64 +1374,7 @@ volume:
   ## @section Volume Server Persistence Parameters
   ##
 
-  dataVolumes:
-    -
-      ## @param volume.dataVolumes[0].name Name of the data volume
-      ##
-      name: data-0
-      ## @param volume.dataVolumes[0].mountPath Path to mount the volume at.
-      ##
-      mountPath: /data-0
-      ## @param volume.dataVolumes[0].subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
-      ##
-      subPath: ""
-      ## @param volume.dataVolumes[0].maxVolumes Max number of SeaweedFS volumes this data volume can be divided into. If set to 0, the limit will be auto configured as free disk space divided by default volume size (30GB)
-      ## ref: https://github.com/seaweedfs/seaweedfs/wiki/FAQ#how-many-volumes-do-i-need
-      ## ref: https://github.com/seaweedfs/seaweedfs/blob/master/weed/util/constants_4bytes.go#L8
-      ##
-      maxVolumes: 8
-      ## Enable persistence using Persistent Volume Claims
-      ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
-      ##
-      persistence:
-        ## @param volume.dataVolumes[0].persistence.enabled Enable persistence on Volume Server using Persistent Volume Claims
-        ##
-        enabled: true
-        ## @param volume.dataVolumes[0].persistence.storageClass Storage class of backing PVC
-        ## If defined, storageClassName: <storageClass>
-        ## If set to "-", storageClassName: "", which disables dynamic provisioning
-        ## If undefined (the default) or set to null, no storageClassName spec is
-        ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-        ##   GKE, AWS & OpenStack)
-        ##
-        storageClass: ""
-        ## @param volume.dataVolumes[0].persistence.annotations Persistent Volume Claim annotations
-        ##
-        annotations: {}
-        ## @param volume.dataVolumes[0].persistence.accessModes Persistent Volume Access Modes
-        ##
-        accessModes:
-          - ReadWriteOnce
-        ## @param volume.dataVolumes[0].persistence.size Size of data volume
-        ##
-        size: 8Gi
-        ## @param volume.dataVolumes[0].persistence.existingClaim The name of an existing PVC to use for persistence
-        ##
-        existingClaim: ""
-        ## @param volume.dataVolumes[0].persistence.selector Selector to match an existing Persistent Volume for data PVC
-        ## If set, the PVC can't have a PV dynamically provisioned for it
-        ## E.g.
-        ## selector:
-        ##   matchLabels:
-        ##     app: my-app
-        ##
-        selector: {}
-        ## @param volume.dataVolumes[0].persistence.dataSource Custom PVC data source
-        ##
-        dataSource: {}
-  ## Enable Volume logs persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
-  ##
+
   logPersistence:
     ## @param volume.logPersistence.enabled Enable logs persistence on Volume Server using Persistent Volume Claims
     ##
