@@ -17,6 +17,7 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: volumeController
     spec:
+      replicas: 1
       {{- include "seaweedfs.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: seaweedfs-volume-controller
       automountServiceAccountToken: {{ .Values.volumeController.automountServiceAccountToken }}
