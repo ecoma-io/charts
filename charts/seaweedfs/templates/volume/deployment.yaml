@@ -5,7 +5,6 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: volumeController
-  {{- if or .Values.volumeController.statefulsetAnnotations .Values.commonAnnotations }}
 spec:
   {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.volumeController.podLabels .Values.commonLabels) "context" .) }}
   selector:
@@ -64,7 +63,7 @@ spec:
         {{- end }}
       containers:
         - name: bitnami/kubectl
-          image: {{ template "sseaweedfs.volumeController.image" . }}
+          image: {{ template "seaweedfs.volumeController.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.volumeController.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumeController.containerSecurityContext "context" $) | nindent 12 }}
