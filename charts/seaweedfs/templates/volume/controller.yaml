@@ -63,7 +63,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.volumeController.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: bitnami/kubectl
+        - name: controler
           image: {{ template "seaweedfs.volumeController.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.volumeController.containerSecurityContext.enabled }}
