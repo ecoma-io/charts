@@ -53,9 +53,9 @@ spec:
       {{- if .Values.volumeController.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.volumeController.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
-      # {{- if .Values.volumeController.podSecurityContext.enabled }}
-      # securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumeController.podSecurityContext "context" $) | nindent 8 }}
-      # {{- end }}
+      {{- if .Values.volumeController.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumeController.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.volumeController.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.volumeController.terminationGracePeriodSeconds }}
       {{- end }}
@@ -75,7 +75,7 @@ spec:
             - -c
             - |
               # Vòng lặp theo dõi ConfigMap, in ra danh sách node,...
-              kubectl get configmap seaweedfs-volume-defined -n default -w | while read line; do
+              kubectl get configmap '{{ template "seaweedfs.volume.fullname" . }}-defined' -n {{ include "common.names.namespace" . | quote }} -w | while read line; do
                 echo "ConfigMap event: $line"
                 echo "Danh sách node và labels:"
                 kubectl get nodes --show-labels
