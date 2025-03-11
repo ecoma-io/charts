@@ -1489,6 +1489,183 @@ volume:
       ##
       selector: {}
 
+
+## @section volume-controller Parameters
+##
+volumeController:
+
+  image:
+    registry: docker.io
+    repository: bitnami/kubectl
+    tag: 1.32.2-debian-12-r4
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+
+  ## volume-controller resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param volume-controller.resourcesPreset Set volume-controller container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if webdav.resources is set (webdav.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param volume-controller.resources Set volume-controller container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param volume-controller.podSecurityContext.enabled Enable volume-controller pods' Security Context
+  ## @param volume-controller.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for volume-controller pods
+  ## @param volume-controller.podSecurityContext.sysctls Set kernel settings using the sysctl interface for volume-controller pods
+  ## @param volume-controller.podSecurityContext.supplementalGroups Set filesystem extra groups for volume-controller pods
+  ## @param volume-controller.podSecurityContext.fsGroup Set fsGroup in volume-controller pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volume-controller.containerSecurityContext.enabled Enabled volume-controller container' Security Context
+  ## @param volume-controller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in volume-controller container
+  ## @param volume-controller.containerSecurityContext.runAsUser Set runAsUser in volume-controller container' Security Context
+  ## @param volume-controller.containerSecurityContext.runAsGroup Set runAsGroup in volume-controller container' Security Context
+  ## @param volume-controller.containerSecurityContext.runAsNonRoot Set runAsNonRoot in volume-controller container' Security Context
+  ## @param volume-controller.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in volume-controller container' Security Context
+  ## @param volume-controller.containerSecurityContext.privileged Set privileged in volume-controller container' Security Context
+  ## @param volume-controller.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in volume-controller container' Security Context
+  ## @param volume-controller.containerSecurityContext.capabilities.drop List of capabilities to be dropped in volume-controller container
+  ## @param volume-controller.containerSecurityContext.seccompProfile.type Set seccomp profile in volume-controller container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+      
+  automountServiceAccountToken: false
+  ## @param volume-controller.hostAliases volume-controller pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param volume-controller.podLabels Extra labels for volume-controller pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param volume-controller.podAnnotations Annotations for volume-controller pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param volume-controller.podAffinityPreset Pod affinity preset. Ignored if `volume-controller.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param volume-controller.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `volume-controller.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node volume-controller.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param volume-controller.nodeAffinityPreset.type Node affinity preset type. Ignored if `volume-controller.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param volume-controller.nodeAffinityPreset.key Node label key to match. Ignored if `volume-controller.affinity` is set
+    ##
+    key: ""
+    ## @param volume-controller.nodeAffinityPreset.values Node label values to match. Ignored if `volume-controller.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param volume-controller.affinity Affinity for volume-controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `volume-controller.podAffinityPreset`, `volume-controller.podAntiAffinityPreset`, and `volume-controller.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param volume-controller.nodeSelector Node labels for volume-controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param volume-controller.tolerations Tolerations for volume-controller pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param volume-controller.priorityClassName volume-controller pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param volume-controller.topologySpreadConstraints Topology Spread Constraints for volume-controller pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param volume-controller.schedulerName Name of the k8s scheduler (other than default) for volume-controller pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param volume-controller.terminationGracePeriodSeconds Seconds volume-controller pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param volume-controller.lifecycleHooks for volume-controller containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param volume-controller.sidecars Add additional sidecar containers to the volume-controller pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param volume-controller.initContainers Add additional init containers to the volume-controller pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+
+
+ 
+
+
 ## @section Filer Server Parameters
 ##
 filer:

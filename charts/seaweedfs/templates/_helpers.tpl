@@ -67,6 +67,13 @@ Return the proper SeaweedFS image name
 {{- end -}}
 
 {{/*
+Return the proper image name (for the volumeController image)
+*/}}
+{{- define "seaweedfs.volumeController.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumeController.image "global" .Values.global ) -}}
+{{- end -}}
+
+{{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "seaweedfs.volumePermissions.image" -}}
