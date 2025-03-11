@@ -1,0 +1,31 @@
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: seaweedfs-volume-controller
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: seaweedfs-volume-controller-role
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "nodes"]
+    verbs: ["get", "watch", "list"]
+  - apiGroups: ["apps"]
+    resources: ["statefulsets"]
+    verbs: ["get", "watch", "list", "patch", "create", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: seaweedfs-volume-controller-binding
+subjects:
+  - kind: ServiceAccount
+    name: seaweedfs-volume-controller
+    namespace: default
+roleRef:
+  kind: ClusterRole
+  name: seaweedfs-volume-controller-role
+  apiGroup: rbac.authorization.k8s.io

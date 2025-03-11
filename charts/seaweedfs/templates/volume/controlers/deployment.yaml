@@ -1,0 +1,96 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: '{{ template "seaweedfs.volume.fullname" . }}-controller'
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: volumeController
+  {{- if or .Values.volumeController.statefulsetAnnotations .Values.commonAnnotations }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.volumeController.podLabels .Values.commonLabels) "context" .) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: volumeController
+  strategy: Recreate
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: volumeController
+    spec:
+      {{- include "seaweedfs.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: seaweedfs-volume-controller
+      automountServiceAccountToken: {{ .Values.volumeController.automountServiceAccountToken }}
+      {{- if .Values.volumeController.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.volumeController.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.volumeController.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.volumeController.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if not (empty .Values.volumeController.podAffinityPreset) }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.volumeController.podAffinityPreset "component" "volumeController" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.volumeController.podAntiAffinityPreset) }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.volumeController.podAntiAffinityPreset "component" "volumeController" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.volumeController.nodeAffinityPreset.type) }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.volumeController.nodeAffinityPreset.type "key" .Values.volumeController.nodeAffinityPreset.key "values" .Values.volumeController.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.volumeController.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.volumeController.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.volumeController.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.volumeController.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.volumeController.priorityClassName }}
+      priorityClassName: {{ .Values.volumeController.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.volumeController.schedulerName }}
+      schedulerName: {{ .Values.volumeController.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.volumeController.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.volumeController.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.volumeController.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumeController.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.volumeController.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.volumeController.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.volumeController.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.volumeController.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: bitnami/kubectl
+          image: {{ template "sseaweedfs.volumeController.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.volumeController.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumeController.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Starting controller script"
+              # Ví dụ: tạo file healthy sau khi khởi tạo thành công
+              touch /tmp/healthy
+              # Vòng lặp theo dõi ConfigMap, in ra danh sách node,...
+              kubectl get configmap seaweedfs-volume-defined -n default -w | while read line; do
+                echo "ConfigMap event: $line"
+                echo "Danh sách node và labels:"
+                kubectl get nodes --show-labels
+              done
+          {{- if .Values.volumeController.resources }}
+          resources: {{- toYaml .Values.volumeController.resources | nindent 12 }}
+          {{- else if ne .Values.volumeController.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumeController.resourcesPreset) | nindent 12 }}
+          {{- end }} 
+          {{- if .Values.volumeController.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.volumeController.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.volumeController.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.volumeController.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+
